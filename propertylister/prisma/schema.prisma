@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum Type {
+  RENT
+  SALE
+}
+
+enum BHK {
+  ONE_BHK
+  TWO_BHK
+  THREE_BHK
+  FOUR_BHK
+  ONE_RK
+}
+
+enum Parking {
+  YES
+  NO
+}
+
+enum PreferredTenant {
+  FAMILY
+  BACHELORS
+}
+
+enum PropertyType {
+  APARTMENT
+  INDEPENDENT
+}
+
+// Models
+model Images {
+  id         Int      @id @default(autoincrement())
+  url        String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId Int
+}
+
+model Property {
+  id              Int              @id @default(autoincrement())
+  name            String
+  description     String?          @db.Text
+  type            Type
+  price           Float
+  street          String
+  city            String
+  state           String
+  zipcode         String
+  bhk             BHK
+  area            Int
+  parking         Parking
+  images          Images[]
+  preferredTenant PreferredTenant
+  propertyType    PropertyType
+  availableFrom   DateTime
+  isFeatured      Boolean          @default(false)
+  isSold          Boolean          @default(false)
+  owner           User             @relation("UserProperties", fields: [ownerId], references: [id])
+  ownerId         Int
+  savedByUsers    User[]           @relation("SavedProperties") // <-- Inverse of User.savedProperties
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model User {
+  id              Int        @id @default(autoincrement())
+  email           String     @unique
+  image           String?
+  properties      Property[] @relation("UserProperties")     // <-- Inverse of Property.owner
+  savedProperties Property[] @relation("SavedProperties")    // <-- Inverse of Property.savedByUsers
+  createdAt       DateTime   @default(now())
+}
