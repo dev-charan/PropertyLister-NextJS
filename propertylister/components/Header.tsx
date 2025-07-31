@@ -25,7 +25,6 @@ const Header = (): React.ReactElement => {
                 <p className="hero-subtitle">
                     Search for your perfect home in the best location around the world
                 </p>
-                {/* Search box */}
                 <SearchProperties/>
                <Flex justify='center' gap={8}>
                  <Button>

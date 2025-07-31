@@ -1,16 +1,21 @@
 import { Button, Row ,Col} from 'antd'
 import React from 'react'
 import AboutUsImage from "@/public/images/about-us.jpg"
+import Image from 'next/image';
 const HomePage = () => {
   return (
     <div className="container">
       <div className="section">
         <Row gutter={[32,32]}>
           <Col xs={24} md={12}>
-            <img
+            <Image
+            height={0}
+            width={0}
+            sizes='100vw'
               src={AboutUsImage.src}
               alt="about"
               className="about-us-image expand"
+             priority
             />
           </Col>
           <Col xs={24} md={12}>
